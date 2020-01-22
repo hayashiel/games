@@ -1,0 +1,508 @@
+import pygame
+ 
+from random import randint
+ 
+import os
+ 
+pygame.init()
+ 
+pointa = 0
+ 
+pointb = 0
+ 
+WHITE = (255,255,255)
+ 
+dist = 20
+ 
+BLACK = (0,0,0)
+ 
+RED = (255,0,0)
+ 
+green = (0, 255, 0)
+ 
+blue = (0, 0, 128)
+ 
+WIN_WIDTH = 720
+ 
+WIN_HEIGHT = 500
+ 
+ 
+ 
+class Ball(pygame.sprite.Sprite):
+ 
+ def __init__(self,color,width,changex,changey):
+ 
+   super().__init__()
+ 
+   self.pos = (360,250)
+ 
+   self.posx = 360
+ 
+   self.posy = 250
+ 
+   self.changex = changex
+ 
+   self.changey = changey
+ 
+   self.width = width
+ 
+   self.image = pygame.Surface([self.posx + width,self.posy + width])
+ 
+   self.image.fill(BLACK)
+ 
+   self.image.set_colorkey(BLACK)
+ 
+   pos = (360,250)
+ 
+   pygame.draw.circle(self.image,color,(self.posx,self.posy),width)
+ 
+   self.rect = self.image.get_rect()
+ 
+ def change(self):
+ 
+   self.rect.x = self.rect.x + self.changex
+ 
+   self.rect.y = self.rect.y - self.changey
+ 
+ 
+ 
+  
+ 
+ 
+ 
+class Players(pygame.sprite.Sprite):
+ 
+ 
+ 
+ def __init__(self,color,width,height):
+ 
+   # inherit pygame sprite module
+ 
+   super().__init__()
+ 
+   # draw surface for rectangle (the ping pong paddle)
+ 
+   self.image = pygame.Surface([width, height])
+ 
+   self.image.fill(BLACK)
+ 
+   self.image.set_colorkey(BLACK)
+ 
+   # draw rectangle
+ 
+   pygame.draw.rect(self.image,color , [0,0, width, height])
+ 
+   self.rect = self.image.get_rect()
+ 
+ def up(self):
+ 
+   self.rect.y = self.rect.y - dist
+ 
+ def down(self):
+ 
+   self.rect.y = self.rect.y + dist
+ 
+ 
+ 
+size = (WIN_WIDTH, WIN_HEIGHT)
+ 
+RED = (255,0,0)
+ 
+screen = pygame.display.set_mode(size)
+ 
+ 
+ 
+pygame.display.set_caption('PING PONG DING DONG')
+ 
+def text_objects(text, font):
+ 
+   textSurface = font.render(text, True, RED)
+ 
+   return textSurface, textSurface.get_rect()
+ 
+def menu():
+ 
+ while True:
+ 
+   for event in pygame.event.get():
+ 
+     screen.fill(BLACK)
+ 
+    
+ 
+    
+ 
+     if event.type == pygame.QUIT :
+ 
+    
+ 
+               # deactivates the pygame library
+ 
+               pygame.quit()
+ 
+    
+ 
+               # quit the program.
+ 
+               quit()
+ 
+   font = pygame.font.Font('freesansbold.ttf', 32)
+ 
+   text = font.render('Ping Pong',True,RED,blue)
+ 
+   textRect = text.get_rect()
+ 
+   textRect.center = (WIN_WIDTH // 2, WIN_HEIGHT // 2)
+ 
+   button = pygame.draw.rect(screen,WHITE,[300,300,100,50])
+ 
+   mouse = pygame.mouse.get_pos()
+ 
+   mousepress = pygame.mouse.get_pressed()
+ 
+   font2 = pygame.font.Font('freesansbold.ttf',30)
+ 
+   textSurf, textRect2 = text_objects("START", font2)
+ 
+   textRect2.center = (350,340)
+ 
+ 
+ 
+   if 300 < mouse[0] < 350 and 300 < mouse[1] < 350 and mousepress[0]:
+ 
+     break
+ 
+   else:
+ 
+     button = pygame.draw.rect(screen,WHITE,[300,300,50,50])
+ 
+ 
+ 
+   screen.blit(text,textRect)
+ 
+   screen.blit(textSurf,textRect2)
+ 
+   pygame.display.update()
+ 
+def main():
+ 
+   pointa = 0
+ 
+   pointb = 0
+ 
+   dx = 2
+ 
+   dy = 2
+ 
+   all_sprites = pygame.sprite.Group()
+ 
+   Player1 = Players(WHITE,20,100)
+ 
+   Player1.rect.x = 50
+ 
+   Player1.rect.y = 180
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+   Player2 = Players(WHITE,20,100)
+ 
+   Player2.rect.x = 650
+ 
+   Player2.rect.y = 180
+ 
+ 
+ 
+   pongball = Ball(WHITE, 10,dx,dy)
+ 
+   pongball.posx = 360
+ 
+   pongball.posy = 250
+ 
+   ball_sprite = pygame.sprite.Group(pongball)
+ 
+   all_sprites.add(Player1)
+ 
+   all_sprites.add(Player2)
+ 
+   clock = pygame.time.Clock()
+ 
+ 
+ 
+   cond = True
+ 
+   while cond == True:
+ 
+       for event in pygame.event.get():
+ 
+      
+ 
+       # if Keydown
+ 
+         if event.type == pygame.KEYDOWN:
+ 
+ 
+ 
+           # check key pressed
+ 
+           keys = pygame.key.get_pressed()
+ 
+           if keys[pygame.K_q]:
+ 
+             print("Player1's Final Point: ",pointa," Player2's Final 
+Point:", pointb)
+ 
+             if pointa > pointb:
+ 
+               print("Winner: Player1")
+ 
+               print("Loser: Player2")
+ 
+               pointa = 0
+ 
+               pointb = 0
+ 
+               dx = 2
+ 
+               dy = 2
+ 
+               pongball.rect.x = 0
+ 
+               pongball.rect.y = 0
+ 
+               menu()
+ 
+             elif pointa == pointb:
+ 
+               print("Draw")
+ 
+               pointa = 0
+ 
+               pointb = 0
+ 
+               dx = 2
+ 
+               dy = 2
+ 
+               pongball.rect.x = 0
+ 
+               pongball.rect.y = 0
+ 
+               menu()
+ 
+             else:
+ 
+               print("Winner: Player2")
+ 
+               print("Loser: Player1")
+ 
+               pointa = 0
+ 
+               pointb = 0
+ 
+               dx = 2
+ 
+               dy = 2
+ 
+               pongball.rect.x = 0
+ 
+               pongball.rect.y = 0
+ 
+               menu()
+ 
+           if keys[pygame.K_w]:
+ 
+ 
+ 
+           # if Player's y coordinate too low
+ 
+             if Player1.rect.y < 0 or Player1.rect.y == 0:
+ 
+ 
+ 
+               # set it to 0
+ 
+               Player1.rect.y = 0
+ 
+             else:
+ 
+ 
+ 
+               # move Player up 20 pixels
+ 
+               Player1.up()
+ 
+ 
+ 
+           # if s pressed
+ 
+           if keys[pygame.K_s]:
+ 
+          
+ 
+           # if Player's y coordinate too high
+ 
+             if Player1.rect.y > WIN_HEIGHT - Player1.rect.height or 
+Player1.rect.y == WIN_HEIGHT - Player1.rect.height:
+ 
+ 
+ 
+               # stay right next to the edge of the screen
+ 
+               Player1.rect.y = WIN_HEIGHT - Player1.rect.height
+ 
+ 
+ 
+             else:
+ 
+               # move Player down 20 pixels
+ 
+               Player1.down()
+ 
+          
+ 
+           keys2 = pygame.key.get_pressed()
+ 
+          
+ 
+           # if up arrow pressed
+ 
+           if keys2[pygame.K_i]:
+ 
+           # if other Player's y coordinate too low
+ 
+             if Player2.rect.y < 0 or Player2.rect.y == 0:
+ 
+ 
+ 
+               # set it to 0
+ 
+               Player2.rect.y = 0
+ 
+             else:
+ 
+ 
+ 
+ 
+               # move other Player up 20 pixels
+ 
+               Player2.up()
+ 
+          
+ 
+           # if down arrow pressed
+ 
+           if keys2[pygame.K_k]:
+ 
+ 
+ 
+           # if other Player's y coordinate too high
+ 
+             if Player2.rect.y > WIN_HEIGHT - Player2.rect.height or 
+Player2.rect.y == WIN_HEIGHT - Player2.rect.height:
+ 
+ 
+ 
+               # stay right next to the edge of the screen
+ 
+               Player2.rect.y = WIN_HEIGHT - Player2.rect.height
+ 
+             else:
+ 
+               # move Player down 20 pixels
+ 
+               Player2.down()
+ 
+       if pygame.sprite.collide_mask(pongball,Player1):
+ 
+         pongball.changex *= -1
+ 
+         pongball.changey *= -1
+ 
+         pongball.changex = randint(2,4)
+ 
+         pongball.changey = randint(2,4)
+ 
+      
+ 
+       if pygame.sprite.collide_mask(pongball,Player2):
+ 
+         pongball.changex = randint(2,4)
+ 
+         pongball.changey = randint(2,4)
+ 
+         pongball.changex *= -1
+ 
+         pongball.changey *= -1
+ 
+         pongball.change()
+ 
+       if pongball.rect.y < -250 or pongball.rect.y == WIN_HEIGHT:
+ 
+         pongball.changey *= -1
+ 
+ 
+        
+ 
+       if pongball.rect.y > 250 or pongball.rect.y == WIN_HEIGHT:
+ 
+         pongball.changey *= -1
+ 
+       if pongball.rect.x > 400:
+ 
+         pointa += 1
+ 
+         print("Player1's point: ",pointa," Player2's point:", pointb)
+ 
+         pongball.rect.x = 0
+ 
+         pongball.rect.y = 0
+ 
+       if pongball.rect.x < -400:
+ 
+         pointb += 1
+ 
+         print("Player1's point: ",pointa," Player2's point:", pointb)
+ 
+         pongball.rect.x = 0
+ 
+         pongball.rect.y = 0
+ 
+       # create a font object.
+ 
+   # 1st parameter is the font file
+ 
+   # which is present in pygame.
+ 
+   # 2nd parameter is size of the font
+ 
+       pongball.change()
+ 
+   # set the center of the rectangular object.
+ 
+       all_sprites.update()
+ 
+       ball_sprite.update()
+ 
+       screen.fill(BLACK)
+ 
+       all_sprites.draw(screen)
+ 
+       ball_sprite.draw(screen)
+ 
+       pygame.display.flip()
+ 
+       clock.tick(40)
+ 
+   pygame.quit()
+ 
+   quit(0)
+ 
+ 
+ 
+main()
