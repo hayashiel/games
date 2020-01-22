@@ -254,8 +254,7 @@ def main():
  
            if keys[pygame.K_q]:
  
-             print("Player1's Final Point: ",pointa," Player2's Final 
-Point:", pointb)
+             print("Player1's Final Point: ",pointa," Player2's Final Point:", pointb)
  
              if pointa > pointb:
  
