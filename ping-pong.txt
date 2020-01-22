@@ -346,8 +346,7 @@ def main():
  
            # if Player's y coordinate too high
  
-             if Player1.rect.y > WIN_HEIGHT - Player1.rect.height or 
-Player1.rect.y == WIN_HEIGHT - Player1.rect.height:
+             if Player1.rect.y > WIN_HEIGHT - Player1.rect.height or Player1.rect.y == WIN_HEIGHT - Player1.rect.height:
  
  
  
@@ -402,8 +401,7 @@ Player1.rect.y == WIN_HEIGHT - Player1.rect.height:
  
            # if other Player's y coordinate too high
  
-             if Player2.rect.y > WIN_HEIGHT - Player2.rect.height or 
-Player2.rect.y == WIN_HEIGHT - Player2.rect.height:
+             if Player2.rect.y > WIN_HEIGHT - Player2.rect.height or Player2.rect.y == WIN_HEIGHT - Player2.rect.height:
  
  
  
